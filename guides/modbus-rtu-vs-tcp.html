@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Modbus RTU vs TCP: Implementation Notes on Fanless IPCs | Yikway Docs</title>
+<meta name="description" content="Modbus RTU runs over RS-485 serial lines for deterministic, low-cost field communication, while Modbus TCP runs over Ethernet for speed and easy integration. This guide explains when each protocol fits and how to bridge them on a fanless industrial PC.">
+<link rel="canonical" href="https://docs.yikway.com/guides/modbus-rtu-vs-tcp.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"Modbus RTU vs TCP: Implementation Notes on Fanless IPCs","description":"Modbus RTU runs over RS-485 serial lines for deterministic, low-cost field communication, while Modbus TCP runs over Ethernet for speed and easy integration. This guide explains when each protocol fits and how to bridge them on a fanless industrial PC.","url":"https://docs.yikway.com/guides/modbus-rtu-vs-tcp.html","dateModified":"2026-11-20","author":{"@type":"Organization","name":"Yikway Engineering Team","url":"https://www.yikway.com"},"publisher":{"@type":"Organization","name":"Yikway","url":"https://www.yikway.com"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can one fanless industrial PC run Modbus RTU and TCP at the same time?","acceptedAnswer":{"@type":"Answer","text":"Yes. A typical Yikway box PC provides multiple isolated RS-485 COM ports for RTU buses and dual Gigabit Ethernet for TCP, and both stacks can run concurrently in Linux or Windows with a gateway mapping between them."}},{"@type":"Question","name":"Is Modbus TCP faster than Modbus RTU?","acceptedAnswer":{"@type":"Answer","text":"In throughput, yes &mdash; Ethernet carries far more data per transaction. But RTU polling on a short bus is often more deterministic because the timing is not affected by other network traffic. Choose based on whether you need speed or timing consistency."}},{"@type":"Question","name":"Do I need a separate gateway device to convert RTU to TCP?","acceptedAnswer":{"@type":"Answer","text":"Not necessarily. Software gateways running on the IPC itself (for example open-source Modbus libraries on Linux) can translate between the serial bus and TCP clients, which removes one hardware box and one failure point from the cabinet."}}]}]}</script>
+<style>:root{--ink:#1a2332;--sub:#5b6b7f;--line:#dde4ec;--bg:#f6f8fa;--card:#fff;--acc:#0f62fe;--ok:#0e8345}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#101826;color:#fff}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+.brand{color:#fff;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:.5px}
+.brand span{color:#7fb5ff}
+nav a{color:#c6d2e2;text-decoration:none;margin-left:18px;font-size:14px}
+nav a:hover{color:#fff}
+.crumbs{padding:10px 0;font-size:13px;color:#9aa8bb}
+main{background:var(--card);border:1px solid var(--line);border-radius:8px;margin:22px auto;max-width:900px;padding:40px 44px}
+h1{font-size:28px;line-height:1.3;margin-bottom:8px}
+.lede{color:var(--sub);font-size:17px;border-left:4px solid var(--acc);padding:6px 0 6px 14px;margin:14px 0 24px}
+h2{font-size:20px;margin:28px 0 10px;padding-top:8px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 22px}
+li{margin:4px 0}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#eef2f7}
+code{background:#eef2f7;padding:2px 5px;border-radius:4px;font:13.5px ui-monospace,Consolas,monospace}
+pre{background:#101826;color:#d7e2f0;padding:14px;border-radius:6px;overflow:auto;margin:14px 0}
+pre code{background:none;color:inherit;padding:0}
+.faq{margin-top:28px}
+.faq h3{font-size:16px;margin:14px 0 4px}
+.meta{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+.cta{margin-top:22px;background:#eef4ff;border:1px solid #c5d9ff;border-radius:6px;padding:14px 18px;font-size:14.5px}
+.cta a{color:var(--acc);font-weight:600;text-decoration:none}
+footer{color:var(--sub);font-size:13.5px;text-align:center;padding:26px 0 40px}
+footer a{color:var(--acc);text-decoration:none}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:14px;margin:20px 0}
+.card{border:1px solid var(--line);border-radius:8px;padding:16px 18px;background:var(--bg)}
+.card h3{font-size:16.5px;margin-bottom:6px}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{color:var(--acc)}
+.card p{font-size:14px;color:var(--sub);margin:0}
+.note{font-size:13.5px;color:var(--sub)}</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="top"><a class="brand" href="../">YIKWAY<span>&nbsp;DOCS</span></a>
+<nav><a href="https://www.yikway.com/">Main Site</a><a href="https://www.yikway.com/products/">Products</a><a href="../llms.txt">llms.txt</a></nav></div>
+<div class="crumbs"><a style="color:#9aa8bb;text-decoration:none" href="../">Docs</a> / Guides / Protocols</div>
+</div></header><main><h1>Modbus RTU vs TCP: Implementation Notes on Fanless IPCs</h1><p class="lede">Modbus RTU runs over RS-485 serial lines for deterministic, low-cost field communication, while Modbus TCP runs over Ethernet for speed and easy integration. This guide explains when each protocol fits and how to bridge them on a fanless industrial PC.</p>
+<h2>Quick answer</h2>
+<p>Choose <strong>Modbus RTU</strong> when you talk to field devices (PLCs, sensors, meters) over RS-485 in a daisy chain &mdash; it is cheap, deterministic and electrically robust. Choose <strong>Modbus TCP</strong> when devices sit on an Ethernet network, when throughput matters, or when multiple clients need the same data. On a Yikway fanless IPC you can run both at once and bridge them with a software gateway.</p>
+<h2>Side-by-side comparison</h2>
+<table>
+<tr><th>Aspect</th><th>Modbus RTU</th><th>Modbus TCP</th></tr>
+<tr><td>Physical layer</td><td>RS-485 / RS-232 serial</td><td>Ethernet (TCP port 502)</td></tr>
+<tr><td>Topology</td><td>Daisy chain, terminated bus</td><td>Star / switch network</td></tr>
+<tr><td>Error check</td><td>CRC-16 per frame</td><td>TCP checksum + Ethernet CRC</td></tr>
+<tr><td>Max devices (typical)</td><td>32 unit loads per bus</td><td>Effectively unlimited per switch</td></tr>
+<tr><td>Determinism</td><td>Good (poll-response timing)</td><td>Depends on network load</td></tr>
+<tr><td>Cable reach</td><td>Up to ~1,200 m</td><td>100 m per switch hop</td></tr>
+<tr><td>Typical use</td><td>Meters, drives, temperature controllers</td><td>SCADA, MES, line-level integration</td></tr>
+</table>
+<h2>Practical notes from the field</h2>
+<ul>
+<li><strong>Bridging:</strong> most IPC deployments end up needing both &mdash; an RTU bus in the field and a TCP network in the control room. A lightweight gateway (open-source <code>modbus</code> libraries on Linux, or a dedicated converter) maps RTU slave IDs to TCP unit IDs.</li>
+<li><strong>Timing:</strong> RTU polling intervals are predictable; TCP adds jitter. For closed-loop control, keep RTU or use EtherCAT/PROFINET instead &mdash; Modbus of either kind is not a real-time protocol.</li>
+<li><strong>Security:</strong> Modbus TCP has no authentication. Never expose port 502 across network segments; segment with VLANs or a firewall on the IPC.</li>
+<li><strong>Serial settings:</strong> the classic RTU failure is a baud/parity mismatch (8N1 vs 8E1). Lock the settings in documentation, not in tribal knowledge.</li>
+</ul>
+<div class="faq"><h2>Frequently Asked Questions</h2><h3>Can one fanless industrial PC run Modbus RTU and TCP at the same time?</h3><p>Yes. A typical Yikway box PC provides multiple isolated RS-485 COM ports for RTU buses and dual Gigabit Ethernet for TCP, and both stacks can run concurrently in Linux or Windows with a gateway mapping between them.</p><h3>Is Modbus TCP faster than Modbus RTU?</h3><p>In throughput, yes &mdash; Ethernet carries far more data per transaction. But RTU polling on a short bus is often more deterministic because the timing is not affected by other network traffic. Choose based on whether you need speed or timing consistency.</p><h3>Do I need a separate gateway device to convert RTU to TCP?</h3><p>Not necessarily. Software gateways running on the IPC itself (for example open-source Modbus libraries on Linux) can translate between the serial bus and TCP clients, which removes one hardware box and one failure point from the cabinet.</p></div><div class="cta">Need hardware for this application? <a href="https://www.yikway.com/products/">Explore Yikway industrial PCs</a> or <a href="mailto:cnyikway@gmail.com">email our engineers</a> for a free selection review.</div><p class="meta">Maintained by the Yikway Engineering Team · Last updated: 2026-11-20 · <a href="../">All documentation</a></p></main><footer><div class="wrap">
+<p>Maintained by the engineering team at <a href="https://www.yikway.com/">Yikway</a>, an industrial PC manufacturer in Shenzhen, China.</p>
+<p><a href="https://www.yikway.com/products/">Industrial PC Products</a> · <a href="mailto:cnyikway@gmail.com">Contact Engineering</a></p>
+</div></footer>
+</body>
+</html>

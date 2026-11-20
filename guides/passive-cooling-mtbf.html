@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Passive Cooling Design: Why Fanless IPCs Reach Industrial MTBF | Yikway Docs</title>
+<meta name="description" content="Fanless industrial PCs use the aluminum chassis itself as the heatsink, eliminating the fan — the part with the shortest service life. This guide explains the thermal path, the MTBF argument, and the honest trade-offs of going fanless.">
+<link rel="canonical" href="https://docs.yikway.com/guides/passive-cooling-mtbf.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"Passive Cooling Design: Why Fanless IPCs Reach Industrial MTBF","description":"Fanless industrial PCs use the aluminum chassis itself as the heatsink, eliminating the fan — the part with the shortest service life. This guide explains the thermal path, the MTBF argument, and the honest trade-offs of going fanless.","url":"https://docs.yikway.com/guides/passive-cooling-mtbf.html","dateModified":"2026-11-20","author":{"@type":"Organization","name":"Yikway Engineering Team","url":"https://www.yikway.com"},"publisher":{"@type":"Organization","name":"Yikway","url":"https://www.yikway.com"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What MTBF can a fanless industrial PC realistically achieve?","acceptedAnswer":{"@type":"Answer","text":"Well-designed fanless units commonly target 100,000 hours or more MTBF for the electronics, versus roughly 30,000-50,000 hours for a fan-cooled commercial PC where the fan itself fails first. MTBF is a statistical figure — the field reality is that fanless removes the single most failure-prone component."}},{"@type":"Question","name":"Can a fanless PC run a gaming-class GPU?","acceptedAnswer":{"@type":"Answer","text":"Not realistically. High-TGP consumer GPUs (150 W+) exceed what passive fins can dissipate at industrial ambient temperatures. Fanless edge AI designs use low-profile workstation GPUs (roughly 50-75 W) or integrated/Jetson-class compute instead."}},{"@type":"Question","name":"Does mounting orientation affect a fanless IPC?","acceptedAnswer":{"@type":"Answer","text":"Yes. Finned enclosures are designed for vertical mounting so fins convect naturally; laying the unit flat or stacking units on top of each other reduces the effective surface area and can raise internal temperatures by 5-15°C. Follow the orientation shown in the datasheet."}}]}]}</script>
+<style>:root{--ink:#1a2332;--sub:#5b6b7f;--line:#dde4ec;--bg:#f6f8fa;--card:#fff;--acc:#0f62fe;--ok:#0e8345}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#101826;color:#fff}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+.brand{color:#fff;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:.5px}
+.brand span{color:#7fb5ff}
+nav a{color:#c6d2e2;text-decoration:none;margin-left:18px;font-size:14px}
+nav a:hover{color:#fff}
+.crumbs{padding:10px 0;font-size:13px;color:#9aa8bb}
+main{background:var(--card);border:1px solid var(--line);border-radius:8px;margin:22px auto;max-width:900px;padding:40px 44px}
+h1{font-size:28px;line-height:1.3;margin-bottom:8px}
+.lede{color:var(--sub);font-size:17px;border-left:4px solid var(--acc);padding:6px 0 6px 14px;margin:14px 0 24px}
+h2{font-size:20px;margin:28px 0 10px;padding-top:8px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 22px}
+li{margin:4px 0}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#eef2f7}
+code{background:#eef2f7;padding:2px 5px;border-radius:4px;font:13.5px ui-monospace,Consolas,monospace}
+pre{background:#101826;color:#d7e2f0;padding:14px;border-radius:6px;overflow:auto;margin:14px 0}
+pre code{background:none;color:inherit;padding:0}
+.faq{margin-top:28px}
+.faq h3{font-size:16px;margin:14px 0 4px}
+.meta{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+.cta{margin-top:22px;background:#eef4ff;border:1px solid #c5d9ff;border-radius:6px;padding:14px 18px;font-size:14.5px}
+.cta a{color:var(--acc);font-weight:600;text-decoration:none}
+footer{color:var(--sub);font-size:13.5px;text-align:center;padding:26px 0 40px}
+footer a{color:var(--acc);text-decoration:none}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:14px;margin:20px 0}
+.card{border:1px solid var(--line);border-radius:8px;padding:16px 18px;background:var(--bg)}
+.card h3{font-size:16.5px;margin-bottom:6px}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{color:var(--acc)}
+.card p{font-size:14px;color:var(--sub);margin:0}
+.note{font-size:13.5px;color:var(--sub)}</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="top"><a class="brand" href="../">YIKWAY<span>&nbsp;DOCS</span></a>
+<nav><a href="https://www.yikway.com/">Main Site</a><a href="https://www.yikway.com/products/">Products</a><a href="../llms.txt">llms.txt</a></nav></div>
+<div class="crumbs"><a style="color:#9aa8bb;text-decoration:none" href="../">Docs</a> / Guides / Hardware Design</div>
+</div></header><main><h1>Passive Cooling Design: Why Fanless IPCs Reach Industrial MTBF</h1><p class="lede">Fanless industrial PCs use the aluminum chassis itself as the heatsink, eliminating the fan — the part with the shortest service life. This guide explains the thermal path, the MTBF argument, and the honest trade-offs of going fanless.</p>
+<h2>Quick answer</h2>
+<p>In a fanless IPC, heat moves from CPU to chassis by heat pipes and vapor chambers, then from the finned aluminum enclosure to ambient air by convection. With no moving parts and no dust-ingestion path, the system-level failure rate drops sharply &mdash; the fan is statistically the first thing to fail in a commercial PC, typically within 30,000&ndash;50,000 hours, while a sealed fanless design routinely targets 100,000+ hours MTBF for electronics.</p>
+<h2>The thermal path, step by step</h2>
+<ol>
+<li><strong>CPU die &rarr; cold plate:</strong> direct-mount heat spreader or vapor chamber over the CPU (and GPU on Edge AI models).</li>
+<li><strong>Heat pipes:</strong> move heat from component hotspots to the chassis walls without any pump or fan.</li>
+<li><strong>Chassis as heatsink:</strong> extruded or die-cast aluminum fins increase surface area; orientation matters &mdash; vertical fins convect far better than horizontal ones.</li>
+<li><strong>Ambient:</strong> design margin is validated at the rated maximum ambient under full load, not at room temperature.</li>
+</ol>
+<h2>Why this raises reliability</h2>
+<ul>
+<li><strong>No fan bearings to wear out</strong> &mdash; fans are the #1 mechanical failure in field PCs.</li>
+<li><strong>Sealed enclosure:</strong> no dust filter to clog, no conductive dust on boards; IP-rated front panels become practical.</li>
+<li><strong>No vibration resonance</strong> from rotating parts &mdash; important on vehicles and machinery.</li>
+<li><strong>Silence:</strong> matters in labs, medical and noise-sensitive environments.</li>
+</ul>
+<h2>The honest trade-offs</h2>
+<table><tr><th>Fanless advantage</th><th>Cost you accept</th></tr>
+<tr><td>High MTBF, sealed against dust</td><td>Lower peak CPU/GPU wattage than fan-cooled boxes</td></tr>
+<tr><td>Silent, maintenance-free</td><td>Chassis must stay clear for convection; no stacking hot</td></tr>
+<tr><td>No filter cleaning</td><td>Performance depends on ambient temperature and orientation</td></tr></table>
+<p>Rule of thumb: a fanless box sustains a 15&ndash;35 W TDP CPU comfortably at 45&ndash;55&deg;C ambient with correct fin design; beyond that you move to finned-volume engineering or accept throttling. Choose the CPU for the thermal budget, not the other way around.</p>
+<div class="faq"><h2>Frequently Asked Questions</h2><h3>What MTBF can a fanless industrial PC realistically achieve?</h3><p>Well-designed fanless units commonly target 100,000 hours or more MTBF for the electronics, versus roughly 30,000-50,000 hours for a fan-cooled commercial PC where the fan itself fails first. MTBF is a statistical figure — the field reality is that fanless removes the single most failure-prone component.</p><h3>Can a fanless PC run a gaming-class GPU?</h3><p>Not realistically. High-TGP consumer GPUs (150 W+) exceed what passive fins can dissipate at industrial ambient temperatures. Fanless edge AI designs use low-profile workstation GPUs (roughly 50-75 W) or integrated/Jetson-class compute instead.</p><h3>Does mounting orientation affect a fanless IPC?</h3><p>Yes. Finned enclosures are designed for vertical mounting so fins convect naturally; laying the unit flat or stacking units on top of each other reduces the effective surface area and can raise internal temperatures by 5-15°C. Follow the orientation shown in the datasheet.</p></div><div class="cta">Need hardware for this application? <a href="https://www.yikway.com/products/">Explore Yikway industrial PCs</a> or <a href="mailto:cnyikway@gmail.com">email our engineers</a> for a free selection review.</div><p class="meta">Maintained by the Yikway Engineering Team · Last updated: 2026-11-20 · <a href="../">All documentation</a></p></main><footer><div class="wrap">
+<p>Maintained by the engineering team at <a href="https://www.yikway.com/">Yikway</a>, an industrial PC manufacturer in Shenzhen, China.</p>
+<p><a href="https://www.yikway.com/products/">Industrial PC Products</a> · <a href="mailto:cnyikway@gmail.com">Contact Engineering</a></p>
+</div></footer>
+</body>
+</html>

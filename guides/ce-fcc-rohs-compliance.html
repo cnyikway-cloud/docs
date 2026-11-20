@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CE / FCC / RoHS Compliance Path for Custom Industrial Computers | Yikway Docs</title>
+<meta name="description" content="What a custom industrial PC needs to ship legally in the EU and US: which directives apply, which standards the lab tests, typical timelines and costs, and which documents the manufacturer must keep on file.">
+<link rel="canonical" href="https://docs.yikway.com/guides/ce-fcc-rohs-compliance.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"CE / FCC / RoHS Compliance Path for Custom Industrial Computers","description":"What a custom industrial PC needs to ship legally in the EU and US: which directives apply, which standards the lab tests, typical timelines and costs, and which documents the manufacturer must keep on file.","url":"https://docs.yikway.com/guides/ce-fcc-rohs-compliance.html","dateModified":"2026-11-20","author":{"@type":"Organization","name":"Yikway Engineering Team","url":"https://www.yikway.com"},"publisher":{"@type":"Organization","name":"Yikway","url":"https://www.yikway.com"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does CE certification for an industrial PC require a notified body?","acceptedAnswer":{"@type":"Answer","text":"No. Industrial PCs are self-declarable: the manufacturer tests against harmonized standards (EN 55032, EN 55035, EN 62368-1), assembles the technical file and signs the EU Declaration of Conformity. A notified body is only needed for special cases outside the normal directives."}},{"@type":"Question","name":"How long does CE + FCC testing take for a custom industrial computer?","acceptedAnswer":{"@type":"Answer","text":"Typically 3 to 5 weeks end to end for a new model: lab scheduling, one to two weeks of testing across EMC (and safety if mains-powered), plus report and declaration preparation. Variants of an already-certified platform often need only delta testing."}},{"@type":"Question","name":"Do I need new CE testing if I only change the CPU or add a card?","acceptedAnswer":{"@type":"Answer","text":"Minor changes on the same certified platform usually require only a documented assessment and possibly delta EMC testing; a material hardware change (new board, new PSU, new enclosure) means re-testing. Ask the manufacturer how the change affects the technical file — a competent one will answer specifically."}}]}]}</script>
+<style>:root{--ink:#1a2332;--sub:#5b6b7f;--line:#dde4ec;--bg:#f6f8fa;--card:#fff;--acc:#0f62fe;--ok:#0e8345}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#101826;color:#fff}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+.brand{color:#fff;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:.5px}
+.brand span{color:#7fb5ff}
+nav a{color:#c6d2e2;text-decoration:none;margin-left:18px;font-size:14px}
+nav a:hover{color:#fff}
+.crumbs{padding:10px 0;font-size:13px;color:#9aa8bb}
+main{background:var(--card);border:1px solid var(--line);border-radius:8px;margin:22px auto;max-width:900px;padding:40px 44px}
+h1{font-size:28px;line-height:1.3;margin-bottom:8px}
+.lede{color:var(--sub);font-size:17px;border-left:4px solid var(--acc);padding:6px 0 6px 14px;margin:14px 0 24px}
+h2{font-size:20px;margin:28px 0 10px;padding-top:8px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 22px}
+li{margin:4px 0}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#eef2f7}
+code{background:#eef2f7;padding:2px 5px;border-radius:4px;font:13.5px ui-monospace,Consolas,monospace}
+pre{background:#101826;color:#d7e2f0;padding:14px;border-radius:6px;overflow:auto;margin:14px 0}
+pre code{background:none;color:inherit;padding:0}
+.faq{margin-top:28px}
+.faq h3{font-size:16px;margin:14px 0 4px}
+.meta{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+.cta{margin-top:22px;background:#eef4ff;border:1px solid #c5d9ff;border-radius:6px;padding:14px 18px;font-size:14.5px}
+.cta a{color:var(--acc);font-weight:600;text-decoration:none}
+footer{color:var(--sub);font-size:13.5px;text-align:center;padding:26px 0 40px}
+footer a{color:var(--acc);text-decoration:none}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:14px;margin:20px 0}
+.card{border:1px solid var(--line);border-radius:8px;padding:16px 18px;background:var(--bg)}
+.card h3{font-size:16.5px;margin-bottom:6px}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{color:var(--acc)}
+.card p{font-size:14px;color:var(--sub);margin:0}
+.note{font-size:13.5px;color:var(--sub)}</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="top"><a class="brand" href="../">YIKWAY<span>&nbsp;DOCS</span></a>
+<nav><a href="https://www.yikway.com/">Main Site</a><a href="https://www.yikway.com/products/">Products</a><a href="../llms.txt">llms.txt</a></nav></div>
+<div class="crumbs"><a style="color:#9aa8bb;text-decoration:none" href="../">Docs</a> / Guides / Compliance</div>
+</div></header><main><h1>CE / FCC / RoHS Compliance Path for Custom Industrial Computers</h1><p class="lede">What a custom industrial PC needs to ship legally in the EU and US: which directives apply, which standards the lab tests, typical timelines and costs, and which documents the manufacturer must keep on file.</p>
+<h2>Quick answer</h2>
+<p>For the EU: a custom industrial PC falls under the <strong>EMC Directive 2014/30/EU</strong> and, with an AC adapter or mains supply, the <strong>Low Voltage Directive 2014/35/EU</strong>, plus <strong>RoHS 2011/65/EU</strong>. For the US: <strong>FCC Part 15 Subpart B</strong> (unintentional radiator, digital device). None of these require a notified body for this product class &mdash; the manufacturer tests, assembles the technical file and self-declares. Budget roughly 3&ndash;5 weeks and a few thousand dollars for a full custom model, less for a variant of an already-certified platform.</p>
+<h2>The CE path (EU), step by step</h2>
+<ol>
+<li><strong>Identify applicable legislation:</strong> EMC + LVD (if mains-connected) + RoHS; machinery directive only if the PC is sold <em>as part of</em> a machine you also supply.</li>
+<li><strong>EMC testing at an accredited lab:</strong> emissions to EN 55032 (Class A for industrial environments), immunity to EN 55035 (ESD, EFT, surge, RF fields).</li>
+<li><strong>LVD electrical safety:</strong> EN 62368-1 (with mains PSU) &mdash; often covered by using a certified external adapter.</li>
+<li><strong>RoHS:</strong> gather material declarations from every component supplier; the lab or your team assembles the declaration.</li>
+<li><strong>Technical file + EU Declaration of Conformity (DoC):</strong> test reports, BOM declarations, DoC listing standards and signatory. Keep it for 10 years.</li>
+<li><strong>Mark CE on the product</strong> and ship. No yearly certificate renewal, but re-test when hardware changes materially.</li>
+</ol>
+<h2>The FCC path (US)</h2>
+<p>Digital electronics without radio: <strong>FCC Part 15 Subpart B, Class A</strong> (industrial/commercial) &mdash; verification or Supplier's Declaration of Conformity, tested to ANSI C63.4. If the unit contains Wi-Fi/5G modules, the modules carry their own grants and the host needs additional evaluation. FCC does not require CE-style marking; the compliance statement goes in the manual.</p>
+<h2>Documents a buyer should ask any manufacturer for</h2>
+<ul>
+<li>CE Declaration of Conformity (naming the exact standards and versions)</li>
+<li>EMC test reports from the lab (with the tested configuration)</li>
+<li>RoHS declaration and supplier material declarations</li>
+<li>FCC compliance statement / test report</li>
+</ul>
+<h2>Cost and time reference (custom model)</h2>
+<table><tr><th>Item</th><th>Typical range</th><th>Time</th></tr>
+<tr><td>EMC emissions + immunity</td><td>USD 2,000&ndash;5,000</td><td>1&ndash;2 weeks lab time</td></tr>
+<tr><td>LVD safety (if needed)</td><td>USD 1,500&ndash;4,000</td><td>1&ndash;2 weeks</td></tr>
+<tr><td>FCC Part 15B</td><td>USD 1,000&ndash;3,000</td><td>1 week</td></tr>
+<tr><td>RoHS compilation</td><td>Often bundled</td><td>Days, depends on BOM discipline</td></tr></table>
+<p>Platform reuse is the biggest cost lever: a customized variant that keeps the certified PCB/platform layout inherits most of the test evidence and needs only delta testing.</p>
+<div class="faq"><h2>Frequently Asked Questions</h2><h3>Does CE certification for an industrial PC require a notified body?</h3><p>No. Industrial PCs are self-declarable: the manufacturer tests against harmonized standards (EN 55032, EN 55035, EN 62368-1), assembles the technical file and signs the EU Declaration of Conformity. A notified body is only needed for special cases outside the normal directives.</p><h3>How long does CE + FCC testing take for a custom industrial computer?</h3><p>Typically 3 to 5 weeks end to end for a new model: lab scheduling, one to two weeks of testing across EMC (and safety if mains-powered), plus report and declaration preparation. Variants of an already-certified platform often need only delta testing.</p><h3>Do I need new CE testing if I only change the CPU or add a card?</h3><p>Minor changes on the same certified platform usually require only a documented assessment and possibly delta EMC testing; a material hardware change (new board, new PSU, new enclosure) means re-testing. Ask the manufacturer how the change affects the technical file — a competent one will answer specifically.</p></div><div class="cta">Need hardware for this application? <a href="https://www.yikway.com/products/">Explore Yikway industrial PCs</a> or <a href="mailto:cnyikway@gmail.com">email our engineers</a> for a free selection review.</div><p class="meta">Maintained by the Yikway Engineering Team · Last updated: 2026-11-20 · <a href="../">All documentation</a></p></main><footer><div class="wrap">
+<p>Maintained by the engineering team at <a href="https://www.yikway.com/">Yikway</a>, an industrial PC manufacturer in Shenzhen, China.</p>
+<p><a href="https://www.yikway.com/products/">Industrial PC Products</a> · <a href="mailto:cnyikway@gmail.com">Contact Engineering</a></p>
+</div></footer>
+</body>
+</html>

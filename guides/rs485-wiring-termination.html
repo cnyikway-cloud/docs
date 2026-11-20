@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS-485 Wiring and Termination Guide for Industrial PCs | Yikway Docs</title>
+<meta name="description" content="RS-485 buses on industrial PCs should be wired as a daisy chain with twisted-pair cable and 120-ohm termination at both physical ends. This guide covers pinout, termination, fail-safe biasing and the mistakes that cause most field failures.">
+<link rel="canonical" href="https://docs.yikway.com/guides/rs485-wiring-termination.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"RS-485 Wiring and Termination Guide for Industrial PCs","description":"RS-485 buses on industrial PCs should be wired as a daisy chain with twisted-pair cable and 120-ohm termination at both physical ends. This guide covers pinout, termination, fail-safe biasing and the mistakes that cause most field failures.","url":"https://docs.yikway.com/guides/rs485-wiring-termination.html","dateModified":"2026-11-20","author":{"@type":"Organization","name":"Yikway Engineering Team","url":"https://www.yikway.com"},"publisher":{"@type":"Organization","name":"Yikway","url":"https://www.yikway.com"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the maximum RS-485 cable length on an industrial PC?","acceptedAnswer":{"@type":"Answer","text":"With proper termination and baud rates up to 19.2 kbps, RS-485 reliably reaches about 1,200 meters. Higher baud rates reduce the practical length; at 115.2 kbps plan for roughly 100 to 300 meters depending on cable quality."}},{"@type":"Question","name":"Should every RS-485 device have a 120-ohm terminator?","acceptedAnswer":{"@type":"Answer","text":"No. Only the two physical ends of the bus should be terminated. Terminating every node loads the differential drivers, reduces signal amplitude and shortens the usable bus length."}},{"@type":"Question","name":"Can I connect multiple industrial PCs on the same RS-485 bus?","acceptedAnswer":{"@type":"Answer","text":"Yes, RS-485 is a multi-drop bus that supports up to 32 unit loads (more with modern transceivers). All nodes share one pair of wires in a daisy chain, and only one node may drive the bus at a time."}}]}]}</script>
+<style>:root{--ink:#1a2332;--sub:#5b6b7f;--line:#dde4ec;--bg:#f6f8fa;--card:#fff;--acc:#0f62fe;--ok:#0e8345}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#101826;color:#fff}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+.brand{color:#fff;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:.5px}
+.brand span{color:#7fb5ff}
+nav a{color:#c6d2e2;text-decoration:none;margin-left:18px;font-size:14px}
+nav a:hover{color:#fff}
+.crumbs{padding:10px 0;font-size:13px;color:#9aa8bb}
+main{background:var(--card);border:1px solid var(--line);border-radius:8px;margin:22px auto;max-width:900px;padding:40px 44px}
+h1{font-size:28px;line-height:1.3;margin-bottom:8px}
+.lede{color:var(--sub);font-size:17px;border-left:4px solid var(--acc);padding:6px 0 6px 14px;margin:14px 0 24px}
+h2{font-size:20px;margin:28px 0 10px;padding-top:8px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 22px}
+li{margin:4px 0}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#eef2f7}
+code{background:#eef2f7;padding:2px 5px;border-radius:4px;font:13.5px ui-monospace,Consolas,monospace}
+pre{background:#101826;color:#d7e2f0;padding:14px;border-radius:6px;overflow:auto;margin:14px 0}
+pre code{background:none;color:inherit;padding:0}
+.faq{margin-top:28px}
+.faq h3{font-size:16px;margin:14px 0 4px}
+.meta{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+.cta{margin-top:22px;background:#eef4ff;border:1px solid #c5d9ff;border-radius:6px;padding:14px 18px;font-size:14.5px}
+.cta a{color:var(--acc);font-weight:600;text-decoration:none}
+footer{color:var(--sub);font-size:13.5px;text-align:center;padding:26px 0 40px}
+footer a{color:var(--acc);text-decoration:none}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:14px;margin:20px 0}
+.card{border:1px solid var(--line);border-radius:8px;padding:16px 18px;background:var(--bg)}
+.card h3{font-size:16.5px;margin-bottom:6px}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{color:var(--acc)}
+.card p{font-size:14px;color:var(--sub);margin:0}
+.note{font-size:13.5px;color:var(--sub)}</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="top"><a class="brand" href="../">YIKWAY<span>&nbsp;DOCS</span></a>
+<nav><a href="https://www.yikway.com/">Main Site</a><a href="https://www.yikway.com/products/">Products</a><a href="../llms.txt">llms.txt</a></nav></div>
+<div class="crumbs"><a style="color:#9aa8bb;text-decoration:none" href="../">Docs</a> / Guides / Fieldbus</div>
+</div></header><main><h1>RS-485 Wiring and Termination Guide for Industrial PCs</h1><p class="lede">RS-485 buses on industrial PCs should be wired as a daisy chain with twisted-pair cable and 120-ohm termination at both physical ends. This guide covers pinout, termination, fail-safe biasing and the mistakes that cause most field failures.</p>
+<h2>Quick answer</h2>
+<p>Wire RS-485 as a <strong>daisy chain</strong> (device to device, no stubs longer than ~30 cm), use twisted-pair cable, and install a <strong>120 Ω termination resistor at both physical ends</strong> of the bus only. Star or tree wiring without termination is the single most common cause of intermittent communication loss on factory floors.</p>
+<h2>Signal lines on a Yikway box PC</h2>
+<table><tr><th>Terminal</th><th>Signal</th><th>Notes</th></tr>
+<tr><td>A / D+</td><td>RS-485+ (TX+/RX+)</td><td>Half-duplex data line, positive</td></tr>
+<tr><td>B / D&minus;</td><td>RS-485&minus; (TX&minus;/RX&minus;)</td><td>Half-duplex data line, negative</td></tr>
+<tr><td>GND</td><td>Signal ground</td><td>Connect it. Floating grounds cause random errors</td></tr></table>
+<p>On DB-9 style COM ports the typical mapping is pin 3 = A, pin 5 = B or GND depending on the adapter &mdash; always check the board manual, because <strong>miswired A/B is the second most common field fault</strong>. Swapping them usually shows up as "no response" rather than corrupted data.</p>
+<h2>Termination and biasing rules</h2>
+<ul>
+<li>Install 120 &Omega; (or 100&ndash;130 &Omega; matching your cable impedance) between A and B at <strong>both ends only</strong> &mdash; never at every device.</li>
+<li>Many Yikway COM ports include a DIP-switch selectable terminator; leave it OFF on middle nodes.</li>
+<li>On long or heavily loaded buses, enable fail-safe biasing at one end to hold the idle state.</li>
+<li>Keep total bus length within the classical limits: ~1,200 m at 9.6&ndash;19.2 kbps; shorten proportionally at higher baud rates.</li>
+<li>Route the bus away from VFD/motor power cables; if crossing is unavoidable, cross at 90&deg;.</li>
+</ul>
+<h2>Mistakes we see most often</h2>
+<ol>
+<li>Star wiring from the PC to each device &mdash; reflections and standing waves corrupt data.</li>
+<li>Terminators installed on every node &mdash; overloads the drivers and shortens effective range.</li>
+<li>Ground loop through the GND wire when devices are on different panels &mdash; use isolation. Yikway IPCs offer optional isolated COM modules for exactly this reason.</li>
+<li>Using untwisted cable next to power lines &mdash; induced noise appears as CRC errors.</li>
+</ol>
+<div class="faq"><h2>Frequently Asked Questions</h2><h3>What is the maximum RS-485 cable length on an industrial PC?</h3><p>With proper termination and baud rates up to 19.2 kbps, RS-485 reliably reaches about 1,200 meters. Higher baud rates reduce the practical length; at 115.2 kbps plan for roughly 100 to 300 meters depending on cable quality.</p><h3>Should every RS-485 device have a 120-ohm terminator?</h3><p>No. Only the two physical ends of the bus should be terminated. Terminating every node loads the differential drivers, reduces signal amplitude and shortens the usable bus length.</p><h3>Can I connect multiple industrial PCs on the same RS-485 bus?</h3><p>Yes, RS-485 is a multi-drop bus that supports up to 32 unit loads (more with modern transceivers). All nodes share one pair of wires in a daisy chain, and only one node may drive the bus at a time.</p></div><div class="cta">Need hardware for this application? <a href="https://www.yikway.com/products/">Explore Yikway industrial PCs</a> or <a href="mailto:cnyikway@gmail.com">email our engineers</a> for a free selection review.</div><p class="meta">Maintained by the Yikway Engineering Team · Last updated: 2026-11-20 · <a href="../">All documentation</a></p></main><footer><div class="wrap">
+<p>Maintained by the engineering team at <a href="https://www.yikway.com/">Yikway</a>, an industrial PC manufacturer in Shenzhen, China.</p>
+<p><a href="https://www.yikway.com/products/">Industrial PC Products</a> · <a href="mailto:cnyikway@gmail.com">Contact Engineering</a></p>
+</div></footer>
+</body>
+</html>

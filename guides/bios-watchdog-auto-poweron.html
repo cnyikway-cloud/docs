@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BIOS Setup Guide: Watchdog Timer, Auto Power-On and TPM Configuration | Yikway Docs</title>
+<meta name="description" content="Three BIOS features matter most for unattended industrial PCs: the hardware watchdog, auto power-on after power loss, and TPM for security. This guide shows where to find them and how to combine BIOS with OS-level settings.">
+<link rel="canonical" href="https://docs.yikway.com/guides/bios-watchdog-auto-poweron.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"BIOS Setup Guide: Watchdog Timer, Auto Power-On and TPM Configuration","description":"Three BIOS features matter most for unattended industrial PCs: the hardware watchdog, auto power-on after power loss, and TPM for security. This guide shows where to find them and how to combine BIOS with OS-level settings.","url":"https://docs.yikway.com/guides/bios-watchdog-auto-poweron.html","dateModified":"2026-11-20","author":{"@type":"Organization","name":"Yikway Engineering Team","url":"https://www.yikway.com"},"publisher":{"@type":"Organization","name":"Yikway","url":"https://www.yikway.com"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I make an industrial PC start automatically after a power cut?","acceptedAnswer":{"@type":"Answer","text":"Set 'Restore AC Power Loss' (sometimes called 'After Power Failure' or 'State After G3') to Power On in BIOS. Combined with the hardware watchdog, the machine survives both outages and OS crashes without on-site intervention."}},{"@type":"Question","name":"What is the difference between a BIOS watchdog and a software watchdog?","acceptedAnswer":{"@type":"Answer","text":"The BIOS/hardware watchdog runs independently of the OS: if the kernel hangs so badly that userspace cannot feed the timer, the board still resets. Software-only watchdogs (like systemd's) cannot recover from a full kernel hang, so for unattended IPCs use the hardware one fed by the OS."}},{"@type":"Question","name":"Can RTC alarm power on the machine at a scheduled time?","acceptedAnswer":{"@type":"Answer","text":"Yes. Enable 'Wake by RTC' or 'RTC Alarm' in BIOS and set the date/time (many boards support daily alarms). Note the RTC uses system time, so after long power-off periods verify the CMOS battery keeps time correctly."}}]}]}</script>
+<style>:root{--ink:#1a2332;--sub:#5b6b7f;--line:#dde4ec;--bg:#f6f8fa;--card:#fff;--acc:#0f62fe;--ok:#0e8345}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#101826;color:#fff}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+.brand{color:#fff;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:.5px}
+.brand span{color:#7fb5ff}
+nav a{color:#c6d2e2;text-decoration:none;margin-left:18px;font-size:14px}
+nav a:hover{color:#fff}
+.crumbs{padding:10px 0;font-size:13px;color:#9aa8bb}
+main{background:var(--card);border:1px solid var(--line);border-radius:8px;margin:22px auto;max-width:900px;padding:40px 44px}
+h1{font-size:28px;line-height:1.3;margin-bottom:8px}
+.lede{color:var(--sub);font-size:17px;border-left:4px solid var(--acc);padding:6px 0 6px 14px;margin:14px 0 24px}
+h2{font-size:20px;margin:28px 0 10px;padding-top:8px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 22px}
+li{margin:4px 0}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#eef2f7}
+code{background:#eef2f7;padding:2px 5px;border-radius:4px;font:13.5px ui-monospace,Consolas,monospace}
+pre{background:#101826;color:#d7e2f0;padding:14px;border-radius:6px;overflow:auto;margin:14px 0}
+pre code{background:none;color:inherit;padding:0}
+.faq{margin-top:28px}
+.faq h3{font-size:16px;margin:14px 0 4px}
+.meta{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+.cta{margin-top:22px;background:#eef4ff;border:1px solid #c5d9ff;border-radius:6px;padding:14px 18px;font-size:14.5px}
+.cta a{color:var(--acc);font-weight:600;text-decoration:none}
+footer{color:var(--sub);font-size:13.5px;text-align:center;padding:26px 0 40px}
+footer a{color:var(--acc);text-decoration:none}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:14px;margin:20px 0}
+.card{border:1px solid var(--line);border-radius:8px;padding:16px 18px;background:var(--bg)}
+.card h3{font-size:16.5px;margin-bottom:6px}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{color:var(--acc)}
+.card p{font-size:14px;color:var(--sub);margin:0}
+.note{font-size:13.5px;color:var(--sub)}</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="top"><a class="brand" href="../">YIKWAY<span>&nbsp;DOCS</span></a>
+<nav><a href="https://www.yikway.com/">Main Site</a><a href="https://www.yikway.com/products/">Products</a><a href="../llms.txt">llms.txt</a></nav></div>
+<div class="crumbs"><a style="color:#9aa8bb;text-decoration:none" href="../">Docs</a> / Guides / BIOS</div>
+</div></header><main><h1>BIOS Setup Guide: Watchdog Timer, Auto Power-On and TPM Configuration</h1><p class="lede">Three BIOS features matter most for unattended industrial PCs: the hardware watchdog, auto power-on after power loss, and TPM for security. This guide shows where to find them and how to combine BIOS with OS-level settings.</p>
+<h2>Quick answer</h2>
+<p>For a 24/7 unattended IPC, set <strong>Restore AC Power Loss = Power On</strong> (so the machine boots after any outage), enable the <strong>hardware watchdog</strong> and feed it from the OS, and enable <strong>TPM 2.0</strong> if you use disk encryption. BIOS menu names vary by board generation, but the functions below exist on every Yikway board.</p>
+<h2>Auto power-on after power failure</h2>
+<table><tr><th>Typical menu path</th><th>Setting</th><th>Choose</th></tr>
+<tr><td>Chipset &gt; South Bridge / Advanced &gt; ACPI</td><td>Restore AC Power Loss / After Power Failure</td><td><strong>Power On</strong> (or Last State if operator policy requires)</td></tr>
+<tr><td>Advanced &gt; RTC</td><td>RTC Alarm / Wake by RTC</td><td>Optional scheduled boot</td></tr>
+<tr><td>Boot</td><td>Boot failure guard / Fast Boot</td><td>Enable guard for headless racks</td></tr></table>
+<p>Use <em>Power On</em>, not <em>Last State</em>, when the machine must always come back after a blackout &mdash; Last State will not start a machine that was soft-shutdown when power died.</p>
+<h2>Hardware watchdog</h2>
+<p>The PCH watchdog reboots the board if the OS stops feeding it. Enable it in BIOS (often <em>Watchdog Timer / WDT</em> under Advanced), then feed it from Linux:</p>
+<pre><code># Test: the system must reboot within the timeout if this stops
+sudo modprobe itco_wdt
+echo V | sudo tee /dev/watchdog   # feeds once; keep a daemon feeding it
+# systemd: RuntimeWatchdogSec=15s in /etc/systemd/system.conf</code></pre>
+<p>Windows equivalents use the vendor watchdog service; ask for the driver package for your board model.</p>
+<h2>TPM 2.0</h2>
+<ul>
+<li>Enable under Security &gt; TPM / Security Device. It appears to Linux via <code>tpm_crb</code> and to Windows as a standard TPM 2.0 device.</li>
+<li>With BitLocker or LUKS, TPM-bound keys let the machine boot unattended while keeping the disk encrypted &mdash; essential when IPCs are deployed at customer sites.</li>
+<li>After clearing the TPM, re-seal keys; a cleared TPM will not release old secrets.</li>
+</ul>
+<h2>One more setting people forget</h2>
+<p>Disable <em>C-States</em> or deep idle packages only if you measured latency jitter that matters; otherwise leave power management at defaults &mdash; fanless thermal designs assume idle states work.</p>
+<div class="faq"><h2>Frequently Asked Questions</h2><h3>How do I make an industrial PC start automatically after a power cut?</h3><p>Set 'Restore AC Power Loss' (sometimes called 'After Power Failure' or 'State After G3') to Power On in BIOS. Combined with the hardware watchdog, the machine survives both outages and OS crashes without on-site intervention.</p><h3>What is the difference between a BIOS watchdog and a software watchdog?</h3><p>The BIOS/hardware watchdog runs independently of the OS: if the kernel hangs so badly that userspace cannot feed the timer, the board still resets. Software-only watchdogs (like systemd's) cannot recover from a full kernel hang, so for unattended IPCs use the hardware one fed by the OS.</p><h3>Can RTC alarm power on the machine at a scheduled time?</h3><p>Yes. Enable 'Wake by RTC' or 'RTC Alarm' in BIOS and set the date/time (many boards support daily alarms). Note the RTC uses system time, so after long power-off periods verify the CMOS battery keeps time correctly.</p></div><div class="cta">Need hardware for this application? <a href="https://www.yikway.com/products/">Explore Yikway industrial PCs</a> or <a href="mailto:cnyikway@gmail.com">email our engineers</a> for a free selection review.</div><p class="meta">Maintained by the Yikway Engineering Team · Last updated: 2026-11-20 · <a href="../">All documentation</a></p></main><footer><div class="wrap">
+<p>Maintained by the engineering team at <a href="https://www.yikway.com/">Yikway</a>, an industrial PC manufacturer in Shenzhen, China.</p>
+<p><a href="https://www.yikway.com/products/">Industrial PC Products</a> · <a href="mailto:cnyikway@gmail.com">Contact Engineering</a></p>
+</div></footer>
+</body>
+</html>

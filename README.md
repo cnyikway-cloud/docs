@@ -26,4 +26,4 @@ CNAME               custom domain docs.yikway.com
 
 ## Related projects
 
-Maintained by mason.peng at [Yikway](https://www.yikway.com/).
+Maintained by the engineering team at [Yikway](https://www.yikway.com/).

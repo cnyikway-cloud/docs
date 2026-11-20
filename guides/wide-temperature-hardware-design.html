@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wide Temperature (-40&deg;C to 70&deg;C) Hardware Design: What Actually Changes on the Board | Yikway Docs</title>
+<meta name="description" content="A wide-temperature industrial PC is not a standard PC in a metal box: the DRAM, SSD, capacitors, oscillators and thermal design all change. This guide explains which components are swapped, what the rating actually covers, and how to read the spec honestly.">
+<link rel="canonical" href="https://docs.yikway.com/guides/wide-temperature-hardware-design.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"Wide Temperature (-40&deg;C to 70&deg;C) Hardware Design: What Actually Changes on the Board","description":"A wide-temperature industrial PC is not a standard PC in a metal box: the DRAM, SSD, capacitors, oscillators and thermal design all change. This guide explains which components are swapped, what the rating actually covers, and how to read the spec honestly.","url":"https://docs.yikway.com/guides/wide-temperature-hardware-design.html","dateModified":"2026-11-20","author":{"@type":"Organization","name":"Yikway Engineering Team","url":"https://www.yikway.com"},"publisher":{"@type":"Organization","name":"Yikway","url":"https://www.yikway.com"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does the -40°C rating mean the PC can run at -40°C?","acceptedAnswer":{"@type":"Answer","text":"It depends on the datasheet. Many wide-temp specs list -40°C as storage temperature while the operating minimum is -25°C or -20°C, because oscillators and DRAM struggle to start at extreme cold. Check the 'operating temperature' line specifically, and ask for the validation report."}},{"@type":"Question","name":"Why does my wide-temperature PC slow down on a hot day?","acceptedAnswer":{"@type":"Answer","text":"Fanless designs protect silicon by throttling when the chassis cannot dissipate heat fast enough at high ambient temperatures. If sustained full-load performance at 60-70°C ambient matters, the hardware must be selected (low-TDP CPU, adequate fin area) for that duty cycle at design time, not fixed later in software."}},{"@type":"Question","name":"Do regular lithium batteries work at -40°C?","acceptedAnswer":{"@type":"Answer","text":"Standard CR2032 RTC cells and consumer Li-ion degrade severely below -20°C. Wide-temp builds specify cells rated for the range, and Li-ion packs for -40°C operation typically use special chemistry (e.g., LiSOCl2) — check the RTC battery and any backup battery in the BOM."}}]}]}</script>
+<style>:root{--ink:#1a2332;--sub:#5b6b7f;--line:#dde4ec;--bg:#f6f8fa;--card:#fff;--acc:#0f62fe;--ok:#0e8345}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#101826;color:#fff}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+.brand{color:#fff;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:.5px}
+.brand span{color:#7fb5ff}
+nav a{color:#c6d2e2;text-decoration:none;margin-left:18px;font-size:14px}
+nav a:hover{color:#fff}
+.crumbs{padding:10px 0;font-size:13px;color:#9aa8bb}
+main{background:var(--card);border:1px solid var(--line);border-radius:8px;margin:22px auto;max-width:900px;padding:40px 44px}
+h1{font-size:28px;line-height:1.3;margin-bottom:8px}
+.lede{color:var(--sub);font-size:17px;border-left:4px solid var(--acc);padding:6px 0 6px 14px;margin:14px 0 24px}
+h2{font-size:20px;margin:28px 0 10px;padding-top:8px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 22px}
+li{margin:4px 0}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#eef2f7}
+code{background:#eef2f7;padding:2px 5px;border-radius:4px;font:13.5px ui-monospace,Consolas,monospace}
+pre{background:#101826;color:#d7e2f0;padding:14px;border-radius:6px;overflow:auto;margin:14px 0}
+pre code{background:none;color:inherit;padding:0}
+.faq{margin-top:28px}
+.faq h3{font-size:16px;margin:14px 0 4px}
+.meta{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+.cta{margin-top:22px;background:#eef4ff;border:1px solid #c5d9ff;border-radius:6px;padding:14px 18px;font-size:14.5px}
+.cta a{color:var(--acc);font-weight:600;text-decoration:none}
+footer{color:var(--sub);font-size:13.5px;text-align:center;padding:26px 0 40px}
+footer a{color:var(--acc);text-decoration:none}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:14px;margin:20px 0}
+.card{border:1px solid var(--line);border-radius:8px;padding:16px 18px;background:var(--bg)}
+.card h3{font-size:16.5px;margin-bottom:6px}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{color:var(--acc)}
+.card p{font-size:14px;color:var(--sub);margin:0}
+.note{font-size:13.5px;color:var(--sub)}</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="top"><a class="brand" href="../">YIKWAY<span>&nbsp;DOCS</span></a>
+<nav><a href="https://www.yikway.com/">Main Site</a><a href="https://www.yikway.com/products/">Products</a><a href="../llms.txt">llms.txt</a></nav></div>
+<div class="crumbs"><a style="color:#9aa8bb;text-decoration:none" href="../">Docs</a> / Guides / Hardware Design</div>
+</div></header><main><h1>Wide Temperature (-40&deg;C to 70&deg;C) Hardware Design: What Actually Changes on the Board</h1><p class="lede">A wide-temperature industrial PC is not a standard PC in a metal box: the DRAM, SSD, capacitors, oscillators and thermal design all change. This guide explains which components are swapped, what the rating actually covers, and how to read the spec honestly.</p>
+<h2>Quick answer</h2>
+<p>To survive <strong>&minus;40&deg;C to +70&deg;C</strong>, every temperature-sensitive component must be industrial-grade: wide-temp DRAM, industrial SSDs (no consumer NAND), solid polymer or tantalum capacitors, and crystal oscillators rated for the full range. The fanless chassis then acts as the heatsink, and the CPU is either low-TDP or thermally derated. Anything less and the unit will pass bench tests but fail in January in Heilongjiang or July in Dubai.</p>
+<h2>What changes compared to a commercial board</h2>
+<table><tr><th>Component</th><th>Commercial build</th><th>Wide-temp build</th></tr>
+<tr><td>DRAM</td><td>0&ndash;85&deg;C modules</td><td>&minus;40&ndash;95&deg;C industrial SODIMM/DIMM</td></tr>
+<tr><td>Storage</td><td>Consumer NAND, 0&ndash;70&deg;C</td><td>Industrial NAND (pSLC or industrial TLC), &minus;40&ndash;85&deg;C</td></tr>
+<tr><td>Capacitors</td><td>Standard electrolytics</td><td>Solid polymer / tantalum; lifetime derated at 70&deg;C+</td></tr>
+<tr><td>Oscillators</td><td>Commercial crystals</td><td>Wide-temp XTAL, TCXO on timing-critical designs</td></tr>
+<tr><td>Battery (RTC)</td><td>Standard CR2032</td><td>Specified for charge/discharge at range extremes</td></tr>
+<tr><td>PCB / conformal coating</td><td>Optional</td><td>Recommended against condensation at low temp</td></tr></table>
+<h2>Reading the spec honestly</h2>
+<ul>
+<li><strong>Operating vs storage:</strong> &minus;40&deg;C is usually a <em>storage</em> rating; operating electronics at &minus;40&deg;C is harder (oscillator start-up, DRAM refresh). Check which one the datasheet means.</li>
+<li><strong>Full-load vs idle:</strong> a "+70&deg;C" rating at idle with a 15 W CPU is not the same as full CPU+GPU load. Ask for the thermal validation report &mdash; ambient temperature at which the unit sustains <em>full load</em>.</li>
+<li><strong>Display caveat:</strong> LCDs are the weak point, not the PC. Wide-temp panel PCs need panel heaters below &minus;20&deg;C or a transflective display.</li>
+<li><strong>Condensation:</strong> moving a cold unit into warm humid air shorts boards. Conformal coating plus slow warm-up procedures prevent it.</li>
+</ul>
+<h2>How Yikway validates wide-temp units</h2>
+<p>Production wide-temp models run a burn-in chamber cycle across the rated range under full CPU load, with soak periods at both extremes and logged temperature probes on CPU, DRAM and SSD. Ask for the test report with your project quote &mdash; a manufacturer who cannot produce it is selling you a metal box.</p>
+<div class="faq"><h2>Frequently Asked Questions</h2><h3>Does the -40°C rating mean the PC can run at -40°C?</h3><p>It depends on the datasheet. Many wide-temp specs list -40°C as storage temperature while the operating minimum is -25°C or -20°C, because oscillators and DRAM struggle to start at extreme cold. Check the 'operating temperature' line specifically, and ask for the validation report.</p><h3>Why does my wide-temperature PC slow down on a hot day?</h3><p>Fanless designs protect silicon by throttling when the chassis cannot dissipate heat fast enough at high ambient temperatures. If sustained full-load performance at 60-70°C ambient matters, the hardware must be selected (low-TDP CPU, adequate fin area) for that duty cycle at design time, not fixed later in software.</p><h3>Do regular lithium batteries work at -40°C?</h3><p>Standard CR2032 RTC cells and consumer Li-ion degrade severely below -20°C. Wide-temp builds specify cells rated for the range, and Li-ion packs for -40°C operation typically use special chemistry (e.g., LiSOCl2) — check the RTC battery and any backup battery in the BOM.</p></div><div class="cta">Need hardware for this application? <a href="https://www.yikway.com/products/">Explore Yikway industrial PCs</a> or <a href="mailto:cnyikway@gmail.com">email our engineers</a> for a free selection review.</div><p class="meta">Maintained by the Yikway Engineering Team · Last updated: 2026-11-20 · <a href="../">All documentation</a></p></main><footer><div class="wrap">
+<p>Maintained by the engineering team at <a href="https://www.yikway.com/">Yikway</a>, an industrial PC manufacturer in Shenzhen, China.</p>
+<p><a href="https://www.yikway.com/products/">Industrial PC Products</a> · <a href="mailto:cnyikway@gmail.com">Contact Engineering</a></p>
+</div></footer>
+</body>
+</html>
