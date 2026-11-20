@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://docs.yikway.com/</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://docs.yikway.com/guides/rs485-wiring-termination.html</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://docs.yikway.com/guides/modbus-rtu-vs-tcp.html</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://docs.yikway.com/guides/linux-compatibility-fanless-ipc.html</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://docs.yikway.com/guides/bios-watchdog-auto-poweron.html</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://docs.yikway.com/guides/wide-temperature-hardware-design.html</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://docs.yikway.com/guides/passive-cooling-mtbf.html</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://docs.yikway.com/guides/gpu-edge-ai-thermal.html</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://docs.yikway.com/guides/cpu-comparison-machine-vision.html</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://docs.yikway.com/guides/m2-pcie-expansion-can-poe-5g.html</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://docs.yikway.com/guides/ce-fcc-rohs-compliance.html</loc><lastmod>2026-11-20</lastmod></url>
+</urlset>

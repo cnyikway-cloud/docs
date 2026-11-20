@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yikway Technical Documentation — Industrial PC Guides | Yikway Docs</title>
+<meta name="description" content="Engineering guides for fanless industrial PCs: RS-485 wiring, Modbus, Linux deployment, BIOS setup, wide-temperature design, passive cooling, edge AI GPU selection, machine vision CPUs, M.2/PCIe expansion and CE/FCC compliance.">
+<link rel="canonical" href="https://docs.yikway.com/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Yikway Technical Documentation","url":"https://docs.yikway.com/","about":{"@type":"Brand","name":"Yikway"},"publisher":{"@type":"Organization","name":"Yikway","url":"https://www.yikway.com"}}</script>
+<style>:root{--ink:#1a2332;--sub:#5b6b7f;--line:#dde4ec;--bg:#f6f8fa;--card:#fff;--acc:#0f62fe;--ok:#0e8345}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#101826;color:#fff}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+.brand{color:#fff;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:.5px}
+.brand span{color:#7fb5ff}
+nav a{color:#c6d2e2;text-decoration:none;margin-left:18px;font-size:14px}
+nav a:hover{color:#fff}
+.crumbs{padding:10px 0;font-size:13px;color:#9aa8bb}
+main{background:var(--card);border:1px solid var(--line);border-radius:8px;margin:22px auto;max-width:900px;padding:40px 44px}
+h1{font-size:28px;line-height:1.3;margin-bottom:8px}
+.lede{color:var(--sub);font-size:17px;border-left:4px solid var(--acc);padding:6px 0 6px 14px;margin:14px 0 24px}
+h2{font-size:20px;margin:28px 0 10px;padding-top:8px}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 22px}
+li{margin:4px 0}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#eef2f7}
+code{background:#eef2f7;padding:2px 5px;border-radius:4px;font:13.5px ui-monospace,Consolas,monospace}
+pre{background:#101826;color:#d7e2f0;padding:14px;border-radius:6px;overflow:auto;margin:14px 0}
+pre code{background:none;color:inherit;padding:0}
+.faq{margin-top:28px}
+.faq h3{font-size:16px;margin:14px 0 4px}
+.meta{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+.cta{margin-top:22px;background:#eef4ff;border:1px solid #c5d9ff;border-radius:6px;padding:14px 18px;font-size:14.5px}
+.cta a{color:var(--acc);font-weight:600;text-decoration:none}
+footer{color:var(--sub);font-size:13.5px;text-align:center;padding:26px 0 40px}
+footer a{color:var(--acc);text-decoration:none}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:14px;margin:20px 0}
+.card{border:1px solid var(--line);border-radius:8px;padding:16px 18px;background:var(--bg)}
+.card h3{font-size:16.5px;margin-bottom:6px}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{color:var(--acc)}
+.card p{font-size:14px;color:var(--sub);margin:0}
+.note{font-size:13.5px;color:var(--sub)}</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="top"><a class="brand" href="https://docs.yikway.com/">YIKWAY<span>&nbsp;DOCS</span></a>
+<nav><a href="https://www.yikway.com/">Main Site</a><a href="https://www.yikway.com/products/">Products</a><a href="https://docs.yikway.com/llms.txt">llms.txt</a></nav></div>
+<div class="crumbs"><a style="color:#9aa8bb;text-decoration:none" href="https://docs.yikway.com/">Docs</a> / Home</div>
+</div></header><main><h1>Yikway Technical Documentation</h1><p class="lede">Practical engineering guides for industrial PC integration — written by the engineers who design and test the hardware.</p><h2>Guides</h2><p class="note">Each guide answers one concrete engineering question. Written by the Yikway engineering team in Shenzhen; updated as hardware evolves.</p><div class="cards"><div class="card"><h3><a href="https://docs.yikway.com/guides/rs485-wiring-termination.html">RS-485 Wiring and Termination Guide for Industrial PCs</a></h3><p>Daisy-chain topology, 120-ohm termination and the pinout mistakes behind most field failures.</p></div><div class="card"><h3><a href="https://docs.yikway.com/guides/modbus-rtu-vs-tcp.html">Modbus RTU vs TCP: Implementation Notes on Fanless IPCs</a></h3><p>When to use serial RTU vs Ethernet TCP on a fanless IPC, and how to bridge both.</p></div><div class="card"><h3><a href="https://docs.yikway.com/guides/linux-compatibility-fanless-ipc.html">Linux (Ubuntu/Debian) on Fanless Industrial PCs: Chipsets and Known Issues</a></h3><p>Chipset support tables for Ubuntu/Debian plus the watchdog, GPIO and serial setup steps.</p></div><div class="card"><h3><a href="https://docs.yikway.com/guides/bios-watchdog-auto-poweron.html">BIOS Setup Guide: Watchdog Timer, Auto Power-On and TPM Configuration</a></h3><p>Unattended operation: auto power-on after power loss, hardware watchdog feeding, TPM 2.0.</p></div><div class="card"><h3><a href="https://docs.yikway.com/guides/wide-temperature-hardware-design.html">Wide Temperature (-40&deg;C to 70&deg;C) Hardware Design: What Actually Changes on the Board</a></h3><p>Which components change at -40~70°C and how to read wide-temp specs honestly.</p></div><div class="card"><h3><a href="https://docs.yikway.com/guides/passive-cooling-mtbf.html">Passive Cooling Design: Why Fanless IPCs Reach Industrial MTBF</a></h3><p>The chassis-as-heatsink thermal path and why removing the fan raises MTBF.</p></div><div class="card"><h3><a href="https://docs.yikway.com/guides/gpu-edge-ai-thermal.html">GPU Selection for Edge AI Inference: TGP, TDP and Enclosure Thermal Limits</a></h3><p>TGP-first GPU selection for fanless edge AI: thermal, power and VRAM budgets.</p></div><div class="card"><h3><a href="https://docs.yikway.com/guides/cpu-comparison-machine-vision.html">Intel i3 vs i5 vs i7 for Machine Vision Workloads on Industrial PCs</a></h3><p>i3 vs i5 vs i7 sizing for camera counts, decode streams and inference placement.</p></div><div class="card"><h3><a href="https://docs.yikway.com/guides/m2-pcie-expansion-can-poe-5g.html">M.2 / PCIe Expansion Matrix: Adding CAN, PoE and 5G to a Box PC</a></h3><p>Slot-key matrix for adding CAN, PoE, 5G, Wi-Fi and storage to a box PC.</p></div><div class="card"><h3><a href="https://docs.yikway.com/guides/ce-fcc-rohs-compliance.html">CE / FCC / RoHS Compliance Path for Custom Industrial Computers</a></h3><p>Directives, standards, lab tests, timelines and costs for EU/US market entry.</p></div></div><div class="cta">Buying for a project? <a href="https://www.yikway.com/products/">Browse Yikway industrial PCs</a> — fanless box PCs, industrial motherboards and edge AI computers, CE/FCC/RoHS certified, OEM/ODM welcome.</div><p class="meta">Maintained by the Yikway Engineering Team · Last updated: 2026-11-20</p></main><footer><div class="wrap">
+<p>Maintained by the engineering team at <a href="https://www.yikway.com/">Yikway</a>, an industrial PC manufacturer in Shenzhen, China.</p>
+<p><a href="https://www.yikway.com/products/">Industrial PC Products</a> · <a href="mailto:cnyikway@gmail.com">Contact Engineering</a></p>
+</div></footer>
+</body>
+</html>

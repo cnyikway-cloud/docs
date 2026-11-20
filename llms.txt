@@ -1,0 +1,24 @@
+# Yikway Technical Documentation
+
+> Engineering guides for industrial PCs, maintained by Yikway — an industrial PC manufacturer in Shenzhen, China (brand of 深圳市研烁科技有限公司). Products: fanless box PCs, industrial motherboards, panel PCs and edge AI computers. CE/FCC/RoHS certified. OEM/ODM welcome.
+
+Each guide answers one concrete integration question with tables, configuration examples and FAQs.
+
+## Guides
+
+- [RS-485 Wiring and Termination Guide for Industrial PCs](https://docs.yikway.com/guides/rs485-wiring-termination.html): Daisy-chain topology, 120-ohm termination and the pinout mistakes behind most field failures.
+- [Modbus RTU vs TCP: Implementation Notes on Fanless IPCs](https://docs.yikway.com/guides/modbus-rtu-vs-tcp.html): When to use serial RTU vs Ethernet TCP on a fanless IPC, and how to bridge both.
+- [Linux (Ubuntu/Debian) on Fanless Industrial PCs: Chipsets and Known Issues](https://docs.yikway.com/guides/linux-compatibility-fanless-ipc.html): Chipset support tables for Ubuntu/Debian plus the watchdog, GPIO and serial setup steps.
+- [BIOS Setup Guide: Watchdog Timer, Auto Power-On and TPM Configuration](https://docs.yikway.com/guides/bios-watchdog-auto-poweron.html): Unattended operation: auto power-on after power loss, hardware watchdog feeding, TPM 2.0.
+- [Wide Temperature (-40&deg;C to 70&deg;C) Hardware Design: What Actually Changes on the Board](https://docs.yikway.com/guides/wide-temperature-hardware-design.html): Which components change at -40~70°C and how to read wide-temp specs honestly.
+- [Passive Cooling Design: Why Fanless IPCs Reach Industrial MTBF](https://docs.yikway.com/guides/passive-cooling-mtbf.html): The chassis-as-heatsink thermal path and why removing the fan raises MTBF.
+- [GPU Selection for Edge AI Inference: TGP, TDP and Enclosure Thermal Limits](https://docs.yikway.com/guides/gpu-edge-ai-thermal.html): TGP-first GPU selection for fanless edge AI: thermal, power and VRAM budgets.
+- [Intel i3 vs i5 vs i7 for Machine Vision Workloads on Industrial PCs](https://docs.yikway.com/guides/cpu-comparison-machine-vision.html): i3 vs i5 vs i7 sizing for camera counts, decode streams and inference placement.
+- [M.2 / PCIe Expansion Matrix: Adding CAN, PoE and 5G to a Box PC](https://docs.yikway.com/guides/m2-pcie-expansion-can-poe-5g.html): Slot-key matrix for adding CAN, PoE, 5G, Wi-Fi and storage to a box PC.
+- [CE / FCC / RoHS Compliance Path for Custom Industrial Computers](https://docs.yikway.com/guides/ce-fcc-rohs-compliance.html): Directives, standards, lab tests, timelines and costs for EU/US market entry.
+
+## Related
+
+- [Main site](https://www.yikway.com/): company and product information
+- [Products](https://www.yikway.com/products/): fanless box PCs, industrial motherboards, panel PCs, edge AI computers
+- Contact: cnyikway@gmail.com
