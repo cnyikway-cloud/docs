@@ -21,4 +21,4 @@ Each guide answers one concrete integration question with tables, configuration 
 
 - [Main site](https://www.yikway.com/): company and product information
 - [Products](https://www.yikway.com/products/): fanless box PCs, industrial motherboards, panel PCs, edge AI computers
-- Contact: cnyikway@gmail.com
+- Contact: mason.peng@yikway.com
